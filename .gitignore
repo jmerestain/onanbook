@@ -37,6 +37,11 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+.vscode
+.vscode/
+vscode
+vscode/
+
 ### venv ###
 # Virtualenv
 # http://iamzed.com/2009/05/07/a-primer-on-virtualenv/
