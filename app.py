@@ -301,13 +301,13 @@ def games_route():
                 'desc': gameData["desc"], # Game description
                 'choices': [
                     { # Choice 1
-                        'title': gameData["choice1"]
-                        'value': gameData["odds1"]
+                        'title': gameData["choice1"],
+                        'value': gameData["odds1"],
                         'balance': 0
                     },
                     { # Choice 2
-                        'title': gameData["choice2"]
-                        'value': gameData["odds2"]
+                        'title': gameData["choice2"],
+                        'value': gameData["odds2"],
                         'balance': 0
                     }
                 ]
