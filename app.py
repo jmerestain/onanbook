@@ -36,7 +36,7 @@ def index(): # Return Games Separated Through Categories
 def bookie_login(): # Bookie Login Endpoint
     if request.headers['bookie'] == "True":
         session['bookie'] = 'iamabookie'
-    return ('', 200)
+    return makeresponse(jsonify(response = "success", status = 200), 200)
 
 # USER routes
 
