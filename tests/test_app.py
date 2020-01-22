@@ -1,18 +1,43 @@
 import unittest
 
-import os,sys,inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir)
+import os,sys
+sys.path.append('..')
 import app, nanoapi
-import os, json, requests
+import json, requests
 
-dataBase = app.mongo.db
 
 baseURL = "http://localhost:5000/api/v1"
 
 class TestApp(unittest.TestCase):
 
+    def setUp(self):
+        self.dataBase = app.mongo.db
+        pass
+    
+    def tearDown(self):
+
+        pass
+
     def testIndex(self):
-        res = request.get(url = baseURL)
-        assert json.loads(res.data)
+        res = requests.get(url = baseURL)
+        expected = {"response": "sportsbook api v1", "status": 200}
+        assert res.json() == expected
+
+    def testRegister(self):
+        userName = "username"
+        passWord = "password"
+        data = {"username": userName,"password": passWord}
+        res = requests.post(url = baseURL+"/user/register", data = json.dumps(data))
+        User = self.dataBase.users.find_one({"username": userName})
+
+        assert res.json()["status"] == 201
+        assert User != None
+
+    def testLogout(self):
+        pass
+
+    def testLogin(self):
+        pass
+        
+if __name__ == "__main__":
+    unittest.main()

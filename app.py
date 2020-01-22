@@ -17,7 +17,7 @@ import nanoapi, ast, sys, bcrypt, json
 ###################################################
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/preTests"
+app.config["MONGO_URI"] = "mongodb://localhost:27017/finalTests"
 # For debug purposes only, protect after
 app.config['SECRET_KEY'] = 'the random string'  
 
@@ -27,8 +27,8 @@ mongo = PyMongo(app)
 @app.route('/api/v1')
 def index(): # Return Games Separated Through Categories
     if "username" in session:
-        return jsonify(response = 'user logged in', status = 200)
-    return jsonify(response = 'sportsbook api v1', status = 200)
+        return make_response(jsonify(response = 'user logged in', status = 200), 200)
+    return make_response(jsonify(response = 'sportsbook api v1', status = 200), 200)
 
 # BOOKIE routes - last priority
 
@@ -199,7 +199,7 @@ def create_user(): # Create user through header, input into MongoDB
 
         return make_response(jsonify(response = "user created and logged in", status = 201), 201)
 
-    return jsonify(response = 'User already exists', status = 400)
+    return make_response(jsonify(response = 'User already exists', status = 400), 400)
 
 # Finished and Debugged
 @app.route('/api/v1/user/login', methods=['POST'])
@@ -332,7 +332,7 @@ def games_route():
             listGames.append(i)
         
         # Dump JSON into response
-        return make_response(json.dumps(listGames, default=json_util.default), 200)
+        return make_response(jsonify(data = json.loads(json.dumps(listGames, default=json_util.default)), status = 200), 200)
     
     # Not logged in
     return make_response(jsonify(response = 'forbidden', status = 403), 403)
@@ -402,21 +402,29 @@ def new_bet():
     if request.method == 'GET':
         if "username" in session:
 
+            bets = mongo.db.bets
+            User = mongo.db.users.find_one({"username": session["username"]})
+            uId = User["_id"]
+            
             # Amount management
             amt = request.args.get('amount')
-            if amt > 50:
-                return make_response(jsonify(response = "amount must be less than or equal to 50.", status = 400), 400)
 
-            # Bet search
-            bets = mongo.db.bets
-            activeBets = bets.find({'active': True})[0:amt]
+            if amt != None:
+                if amt > 50:
+                    return make_response(jsonify(response = "amount must be less than or equal to 50.", status = 400), 400)
+                activeBets = bets.find({"uId": uId})[0:amt]
+            
+            activeBets = bets.find({"uId": uId})[0:10]
             listBets = []
 
             for bet in activeBets:
                 listBets.append(bet)
+
             # Successful retrieval
-            return make_response(json.dumps(listBets, default=json_util.default), 200)
+            return make_response(jsonify(data = json.loads(json.dumps(listBets, default=json_util.default)), status = 200), 200)
+
         # Not Logged In
         return make_response(jsonify(response = 'must be logged in to view', status = 403), 403)
+
     # Wrong method
     return make_response(jsonify(response = "something went wrong", status=405), 405)

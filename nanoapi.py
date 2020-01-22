@@ -84,7 +84,7 @@ def initSub(userAddress):
     if nd["status"] == "success":
         return nd["id"] # Returns ID
     if nd["status"] == "error":
-        return False
+        return False # Subscription exists
 
 def killSub(subId):
     
