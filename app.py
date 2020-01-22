@@ -17,7 +17,7 @@ import nanoapi, ast, sys, bcrypt, json
 ###################################################
 
 app = Flask(__name__)
-app.config["MONGO_URI"] = "mongodb://localhost:27017/finalTests"
+app.config["MONGO_URI"] = "mongodb+srv://wenzani:testPassword@wenzani-rwc9d.mongodb.net/test?retryWrites=true&w=majority"
 # For debug purposes only, protect after
 app.config['SECRET_KEY'] = 'the random string'  
 

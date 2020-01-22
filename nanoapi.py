@@ -74,7 +74,7 @@ def updateBalance(newAmount, username):
 def initSub(userAddress):
     
     url = "https://beta.snapy.io/api/v1/webhooks/address"
-    data = {"address": userAddress, "url": "https://webhook.site/6d48f455-57c1-42c3-a96a-f33e8ef93bd7"}
+    data = {"address": userAddress, "url": "https://onanbook.herokuapp.com/api/v1/webhooks/subscription"}
     header = {"x-api-key": snapy_apiKey, "content-type": "application/json"}
 
     initHook = requests.post(url = url, data = json.dumps(data), headers = header)
